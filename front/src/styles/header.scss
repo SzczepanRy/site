@@ -1,0 +1,18 @@
+@import "./verables";
+.header{
+    height: 40px;
+    width: 100%;
+    background-color: $secondary_color;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    .elements{
+        margin-right: 20px;
+        .kosz{
+            margin-right: 10px;
+            color: white;
+            background-color: $base_color;
+            padding: 5px 10px;
+        }
+    }
+}
