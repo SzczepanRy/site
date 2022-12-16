@@ -39,16 +39,35 @@ app.post("/addUser",async(req:Request,res:Response)=>{
     }
     
 })
+//app.post("/addToCart",async(req:Request,res:Response)=>{
+//    try{
+//        const {i,login}= req.body
+//        
+//        if(await myUser.findOne({login})){
+//            await myUser.updateOne({
+//                login:{login},
+               
+//                $push:{data:i} 
+//            })
+//            console.log(`added item nr ${i} to cart of ${login}`)
+//        }
+        
+        
+        
+//        res.status(202).json({"message":`added item nr ${i} to cart of ${login}`})
+///    }catch(err:any){
+//        res.status(403).json({"message" : err.message})
+//    }
+//})
 app.post("/addToCart",async(req:Request,res:Response)=>{
     try{
         const {i,login}= req.body
         
         if(await myUser.findOne({login})){
-            await myUser.updateOne({
-                login:{login},
-               
-                $push:{data:i} 
-            })
+            await myUser.updateOne(
+                {login:{login}},
+                {$push:{data:{i}}} 
+           )
             console.log(`added item nr ${i} to cart of ${login}`)
         }
         
