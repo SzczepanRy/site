@@ -13,19 +13,25 @@ const Login = ()=>{
             e.preventDefault()
             const Login = login.current.value
             const Password = login.current.value
-            const responce = await api.addUser(Login,Password)
-            if(responce){
+          
+            const exists = await api.checkUser(Login,Password)
+            if(exists){
                 navigate('/main',{state:Login})
+            }
+            else{
+                const responce = await api.addUser(Login,Password)
+                if(responce){
+                    navigate('/main',{state:Login})
+                }
             }
         }catch{
             console.log("bad api addUser call")
-        }
-        
-
-       
+        } 
     }
+    
     return(
         <div className="main">
+            <p>login or create account</p>
             <form onSubmit={addUser}>
                 <input ref={login} placeholder="login"></input>
                 <input ref={password} placeholder="password"></input>

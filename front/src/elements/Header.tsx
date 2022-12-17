@@ -1,13 +1,15 @@
 import React from "react";
 import '../styles/header.scss'
 import api from "../api"
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 const Header = () =>{
     let navigate = useNavigate()
+    let location = useLocation()
+    let user = location.state
     const getBasket = ()=>{
         //async
         // await api.getBasket()
-        navigate("/basket",{replace:true})
+        navigate("/basket",{state:user})
     }
 
     return(

@@ -1,0 +1,8 @@
+@import "verables";
+@import "tile";
+.basket{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+}

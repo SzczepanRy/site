@@ -30,18 +30,39 @@ class Api{
             })
             return data
         }catch{
-            console.log("bad add user ")
+           
+            return false
+        }
+    }
+    async checkUser(Login:string,Password:string){
+        try{
+           
+            const data =  await this.client.post("/checkUser",{
+                login:Login,
+                password:Password
+            })
+            return data
+        }catch{
+           
             return false
         }
     }
     async addToCart(i:number,login:string){
         try{
-            console.log("api")
             const responce = await this.client.post("/addToCart",{i, login})
-            console.log(responce)
             return responce
         }catch{
             return false
+        }
+    }
+    async getBasket(login:string){
+        try{
+            
+            const elements = await this.client.post("/getBasket",{login})
+            let cart_arr = JSON.parse(JSON.stringify(elements)).data
+            return cart_arr
+        }catch{
+            console.error("bad api call for get basket")
         }
     }
 

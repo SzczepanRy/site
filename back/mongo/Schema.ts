@@ -3,11 +3,9 @@ import mongoose ,{Schema} from "mongoose"
 interface User{
     login:string;
     password:string;
-    data:Items[];
+    data:Array<string>;
 };
-interface Items{
-    i:String;
-};
+
 
 
 const UserSchema = new Schema<User>({
@@ -18,11 +16,11 @@ const UserSchema = new Schema<User>({
         type:String
     },
     data:[
+        
         {
-            i:{
-                type:String
-            }
+            type:String
         }
+        
     ]
 
     
