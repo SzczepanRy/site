@@ -60,6 +60,7 @@ class Api{
             
             const elements = await this.client.post("/getBasket",{login})
             let cart_arr = JSON.parse(JSON.stringify(elements)).data
+            console.log(cart_arr)
             return cart_arr
         }catch{
             console.error("bad api call for get basket")

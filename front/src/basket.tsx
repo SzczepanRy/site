@@ -16,6 +16,7 @@ const Basket = ()=>{
             try{
                 //console.log(location.state)
                 let data = await api.getBasket(location.state)
+               // console.log(Object.values(data))
                 setCart(Object.values(data))
             }catch{
                 console.error("could not get basket")
@@ -35,16 +36,20 @@ const Basket = ()=>{
         }
     })
     let end_data:any = []
+
     data.map((tile:any)=>{
         
-        endCart.map((id:string,i:number)=>{
-            if(`${tile.key}`==id){  
-                end_data.push(<Tile key={i} data={tile}/>)
+        endCart.map((el:any,i:number)=>{
+            console.log(el.id)
+            if(`${tile.key}`===el.id){  
+                
+                end_data.push(<Tile num={el.num} key={i} data={tile}/>)
                 
             }
 
         })        
     })
+
     const basket_tiles = end_data.map((tile:any)=>{
         return(tile)
     })

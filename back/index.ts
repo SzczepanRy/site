@@ -54,10 +54,30 @@ app.post("/CheckUser",async(req:Request,res:Response)=>{
 app.post("/addToCart",async(req:Request,res:Response)=>{
     try{
         const {i,login}= req.body
-        await myUser.updateOne(
+        let user:any = await myUser.find(
             {login:login},
-            {$push:{data:[i]}}
+            {data:{$elemMatch:{id:i}}}
         )
+        
+            
+           let inum =user.data.length
+            console.log(inum)
+            // if(inum != undefined){
+            //     inum.num = (Number(inum.num)+1).toString()
+            //    // console.log(inum.num)
+            //     await myUser.updateOne(
+            //         {login:login},
+            //         {data:[{id:i,num:inum.num}]}
+            //     )  
+            // }else{
+                await myUser.updateOne(
+                    {login:login},
+                    {$push:{data:[{id:i,num:"1"}]}}
+                )
+            // }
+        
+
+        
         console.log(`added item nr ${i} to cart of ${login}`)
         res.status(202).json({"message":`added item nr ${i} to cart of ${login}`})
     }catch(err:any){
@@ -70,7 +90,7 @@ app.post("/getBasket",async(req:Request,res:Response)=>{
         const {login} = req.body
         let user = await myUser.findOne({login})
         let out:any = JSON.parse(JSON.stringify(user))
-       
+        console.log(out)
         res.status(203).send(out.data)
     }catch(err:any){
         res.status(403).json({"message" : err.message})

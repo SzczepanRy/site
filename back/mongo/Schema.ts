@@ -3,8 +3,12 @@ import mongoose ,{Schema} from "mongoose"
 interface User{
     login:string;
     password:string;
-    data:Array<string>;
+    data:Array<Obj>;
 };
+interface Obj{
+    id:string;
+    num:string;
+}
 
 
 
@@ -18,7 +22,8 @@ const UserSchema = new Schema<User>({
     data:[
         
         {
-            type:String
+            id:{ type:String},
+            num:{ type:String}
         }
         
     ]

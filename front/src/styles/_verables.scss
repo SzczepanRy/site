@@ -1,9 +1,11 @@
 
 $base_color:black;
 $secondary_color:gray;
-
+$main-back:white;
+$font: sans-serif;
 @mixin center($dir:row){
     display: flex;
+    
     align-items: center;
     justify-content: center;
     flex-direction: $dir;
