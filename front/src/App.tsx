@@ -12,7 +12,7 @@ function App() {
 
   let tiles = data.map((data:any,i:number)=>{
     return(
-      <Tile type="button" key={i} data={data}/>
+      <Tile type="button"  key={i} data={data}/>
     )
   })
   return (

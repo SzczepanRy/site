@@ -1,5 +1,5 @@
 import express from "express"
-import {Request,Response} from "express"
+import e, {Request,Response} from "express"
 
 import mongoose from "mongoose";
 import myUser,{User} from "./mongo/Schema"
@@ -54,10 +54,49 @@ app.post("/CheckUser",async(req:Request,res:Response)=>{
 app.post("/addToCart",async(req:Request,res:Response)=>{
     try{
         const {i,login}= req.body
-        await myUser.updateOne(
+        console.log(i)
+        let myuser:any = await myUser.find(
             {login:login},
-            {$push:{data:[i]}}
         )
+        let user:any = await myUser.find(
+            {login:login},
+            {data:{$elemMatch:{id:i}}}
+        )
+        
+            
+            let json_user = JSON.parse(JSON.stringify(user[0]))
+
+            if(json_user.data[0]==undefined){
+
+                 await myUser.updateOne(
+                     {login:login},
+                     {$push:{data:[{id:i,num:"1"}]}}
+                 )
+            }
+            else{
+
+                let json_user2 = JSON.parse(JSON.stringify(myuser[0]))
+                let json_data2 = JSON.parse(JSON.stringify(json_user2.data))
+                
+                json_data2.map(async(el:any,)=>{
+
+                    if(el.id === i){
+                        let current_val = (Number(el.num)+1).toString()
+                        console.log("corrent val : "+ current_val)
+                        await myUser.updateOne(
+                           {login:login ,"data.id":i},
+                            {$set:
+                                {"data.$.num":current_val}
+                            }
+
+                        )
+                        console.log("found")
+                    }
+
+                })
+            }
+
+
         console.log(`added item nr ${i} to cart of ${login}`)
         res.status(202).json({"message":`added item nr ${i} to cart of ${login}`})
     }catch(err:any){
@@ -70,13 +109,12 @@ app.post("/getBasket",async(req:Request,res:Response)=>{
         const {login} = req.body
         let user = await myUser.findOne({login})
         let out:any = JSON.parse(JSON.stringify(user))
-       
+        console.log(out)
         res.status(203).send(out.data)
     }catch(err:any){
         res.status(403).json({"message" : err.message})
     }
 })
-
 
 mongoose.connection.once("open",()=>{
     console.log("db connected")
