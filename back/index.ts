@@ -57,7 +57,6 @@ app.post("/addToCart",async(req:Request,res:Response)=>{
         console.log(i)
         let myuser:any = await myUser.find(
             {login:login},
-            // {data:{$elemMatch:{id:i}}}
         )
         let user:any = await myUser.find(
             {login:login},
@@ -66,71 +65,38 @@ app.post("/addToCart",async(req:Request,res:Response)=>{
         
             
             let json_user = JSON.parse(JSON.stringify(user[0]))
-           // console.log(typeof json_user.data[0])
-           // let json_data = JSON.parse(JSON.stringify(json_user.data[0]))
-           
-           
+
             if(json_user.data[0]==undefined){
-                console.log("aaaaaaaaaaaaaaaaaaaaaa")
+
                  await myUser.updateOne(
                      {login:login},
                      {$push:{data:[{id:i,num:"1"}]}}
                  )
             }
             else{
-        //         let json_data = JSON.parse(JSON.stringify(json_user.data))
-
 
                 let json_user2 = JSON.parse(JSON.stringify(myuser[0]))
                 let json_data2 = JSON.parse(JSON.stringify(json_user2.data))
                 
                 json_data2.map(async(el:any,)=>{
-                //    let json_data = JSON.parse(JSON.stringify(json_user.data[0]))
-                //     console.log(json_data)
-                    //console.log(el.id, i)
+
                     if(el.id === i){
                         let current_val = (Number(el.num)+1).toString()
                         console.log("corrent val : "+ current_val)
                         await myUser.updateOne(
-                            {login:login},
+                           {login:login ,"data.id":i},
                             {$set:
-                                {data:[{id:i,num:current_val}]}
+                                {"data.$.num":current_val}
                             }
-                        //    {data:[{id:i},{$set:{num:current_val}}]}
+
                         )
                         console.log("found")
-                    }else{
-                        console.log("did not find")
                     }
 
                 })
             }
 
 
-                // let current_val = (Number(json_data.num)+1).toString()
-                // console.log( current_val)
-                // await myUser.updateOne(
-                //     {login:login},
-                //     {data:[{id:i,num:current_val}]}
-                // )
-                
-        //     }
-               
-                
-            
-            // if(inum != undefined){
-            //     inum.num = (Number(inum.num)+1).toString()
-            //    // console.log(inum.num)
-            //     await myUser.updateOne(
-            //         {login:login},
-            //         {data:[{id:i,num:inum.num}]}
-            //     )  
-            // }else{
-                
-            // }
-        
-
-        
         console.log(`added item nr ${i} to cart of ${login}`)
         res.status(202).json({"message":`added item nr ${i} to cart of ${login}`})
     }catch(err:any){
@@ -149,7 +115,6 @@ app.post("/getBasket",async(req:Request,res:Response)=>{
         res.status(403).json({"message" : err.message})
     }
 })
-
 
 mongoose.connection.once("open",()=>{
     console.log("db connected")
